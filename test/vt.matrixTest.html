@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Pruebas para vt.matrix</title>
+        <script src="../vt.matrix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="qunit-1.11.0.css">
+		<style type="text/css">
+			#output{
+				display: none; 
+				position: absolute; 
+				top:10px; 
+				right:10px; 
+				height:200px; 
+				width:200px;
+				background-color: white;
+				color: #FF4040;
+				border: 1px solid black;
+				font-size: 12pt;
+				overflow-y:scroll;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="output"> </div>
+		<div id="qunit"> </div>
+		<div id="qunit-fixture"> </div>
+		<script src="qunit-1.11.0.js"></script>
+		<script>
+				var salida = document.getElementById('output');
+				salida.innerText = "";
+				window.console.mostrar=function(objeto){
+					salida.innerText = salida.innerText + '\n' + objeto;
+				};
+				
+					 
+		      test("Creacion de Matrices", function() {
+		        var matriz;
+		        
+		        matriz = new vt.Matrix([[1]]);
+		        deepEqual(matriz.getData(), [[1]], "La nueva matriz debe ser igual a [[1]].");
+		        deepEqual(matriz.getRows(), 1, "La nueva matriz debe tener 1 fila.");
+		        deepEqual(matriz.getCols(), 1, "La nueva matriz debe tener 1 columna.");
+		        deepEqual(matriz.isSquared(), true, "La matriz [[1]] debe ser cuadrada.");
+		        
+		        matriz = new vt.Matrix([[5, 8]]);
+		        deepEqual(matriz.getData(), [[5, 8]], "La nueva matriz debe ser igual a [[5, 8]].");
+		        deepEqual(matriz.getRows(), 1, "La matriz [[5, 8]] debe tener 1 fila.");
+		        deepEqual(matriz.getCols(), 2, "La matriz [[5, 8]] debe tener 2 columnas.");
+		        deepEqual(matriz.isSquared(), false, "La matriz [[5, 8]] no debe ser cuadrada.");
+		        
+		        matriz = new vt.Matrix([[5], [8]]);
+		        deepEqual(matriz.getData(), [[5], [8]], "La nueva matriz debe ser igual a [[5], [8]].");
+		        deepEqual(matriz.getRows(), 2, "La matriz [[5], [8]] debe tener 2 filas.");
+		        deepEqual(matriz.getCols(), 1, "La matriz [[5], [8]] debe tener 1 columna.");
+		        deepEqual(matriz.isSquared(), false, "La matriz [[5], [8]] no debe ser cuadrada.");
+		        
+		        matriz = vt.Matrix.newMatrix(2,3);
+		        deepEqual(matriz.getData(), [[0, 0, 0], [0, 0, 0]], "La nueva matriz debe ser igual a [[0, 0, 0], [0, 0, 0]].");
+		        deepEqual(matriz.getRows(), 2, "La matriz [[0, 0, 0], [0, 0, 0]] debe tener 2 filas.");
+		        deepEqual(matriz.getCols(), 3, "La matriz [[0, 0, 0], [0, 0, 0]] debe tener 3 columna.");
+		        
+		        
+		        
+		      });
+		      
+		      test("Manipulación de Matrices", function() {
+		        var matriz,
+		        	arreglo,
+		        	nDeterminante;
+		        
+		        matriz = new vt.Matrix([[5], [8]]);
+		        matriz = vt.Matrix.transpose(matriz);
+		        deepEqual(matriz.getData(), [[5, 8]], "La transpuesta de la matriz [[5], [8]] debe ser igual [[5, 8]].");
+		        
+		        arreglo = [[5], [8]];
+		        matriz = vt.Matrix.transpose(arreglo);
+		        deepEqual(matriz, null, "La transpuesta de un objeto que no sea de tipo Matrix debe ser igual null.");
+		        
+		        matriz = new vt.Matrix([[5]]);
+		        nDeterminante = vt.Matrix.determinant(matriz);
+		        deepEqual(nDeterminante, 5, "El determinante de la matriz [[5]] debe ser igual 5.");
+		        
+		        matriz = new vt.Matrix([[1,2], [3,4]]);
+		        nDeterminante = vt.Matrix.determinant(matriz);
+		        deepEqual(nDeterminante, -2, "El determinante de la matriz [[1,2], [3,4]] debe ser igual -2.");
+		        
+		        matriz = new vt.Matrix([[1,-1], [3,-2], [-1,4]]);
+		        nDeterminante = vt.Matrix.determinant(matriz);
+		        deepEqual(nDeterminante, null, "El determinante de la matriz [[1,-1], [3,-2], [-1,4]] debe ser igual null (la matriz debe ser cuadrada).");
+		        
+		        matriz = new vt.Matrix([[1,-1,2], [3,-2,3], [-1,4,4]]);
+		        nDeterminante = vt.Matrix.determinant(matriz);
+		        deepEqual(nDeterminante, 15, "El determinante de la matriz [[1,-1,2], [3,-2,3], [-1,4,4]] debe ser igual 15.");
+		        
+		      });
+		      
+		      test("Operaciones con Matrices", function() {
+		        var matriz,
+		        	arreglo,
+		        	nDeterminante;
+		        
+		        matriz = new vt.Matrix([[3]]);
+		        matriz = vt.Matrix.scalarMultiply(-4, matriz);
+		        deepEqual(matriz.getData(), [[-12]], "La matriz [[3]] multiplicada por -4 debe ser igual [[-12]].");
+		        
+		        matriz = new vt.Matrix([[1], [2]]);
+		        matriz = vt.Matrix.scalarMultiply(2, matriz);
+		        deepEqual(matriz.getData(), [[2], [4]], "La matriz [[1], [2]] multiplicada por 2 debe ser igual [[2], [4]].");
+		        
+		        matriz = new vt.Matrix([[1,-1], [3,-2], [-1,0]]);
+		        matriz = vt.Matrix.scalarMultiply(1, matriz);
+		        deepEqual(matriz.getData(), [[1,-1], [3,-2], [-1,0]], "La matriz [[1,-1], [3,-2], [-1,0]] multiplicada por 1 debe ser igual a [[1,-1], [3,-2], [-1,0]]).");
+		        
+		        matriz = new vt.Matrix([[1,-1], [3,-2], [-1,0]]);
+		        matriz = vt.Matrix.scalarMultiply(0, matriz);
+		        deepEqual(matriz.getData(), [[0,0], [0,0], [0,0]], "La matriz [[1,-1], [3,-2], [-1,0]] multiplicada por 0 debe ser igual a [[0,0], [0,0], [0,0]]).");
+		        
+		      });
+		      
+		</script>
+	</body>
+</html>
