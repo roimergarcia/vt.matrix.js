@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="qunit-1.11.0.css">
 		<style type="text/css">
 			#output{
-				display: none; 
+				display: block; 
 				position: absolute; 
 				top:10px; 
 				right:10px; 
@@ -64,7 +64,7 @@
 		        
 		      });
 		      
-		      test("Manipulación de Matrices", function() {
+		      test("Manipulación de Matrices: transpuesta, determinante y cofactor", function() {
 		        var matriz,
 		        	arreglo,
 		        	nDeterminante;
@@ -93,9 +93,30 @@
 		        nDeterminante = vt.Matrix.determinant(matriz);
 		        deepEqual(nDeterminante, 15, "El determinante de la matriz [[1,-1,2], [3,-2,3], [-1,4,4]] debe ser igual 15.");
 		        
+		        matriz = new vt.Matrix([[1,2], [3,4]]);
+		        nDeterminante = vt.Matrix.cofactor(1, 1, matriz);
+		        deepEqual(nDeterminante, 4, "El cofactor (1,1) de la matriz [[1,2], [3,4]] debe ser igual 4.");
+		        
+		        matriz = new vt.Matrix([[1,2], [3,4]]);
+		        nDeterminante = vt.Matrix.cofactor(1, 2, matriz);
+		        deepEqual(nDeterminante, -3, "El cofactor (1,2) de la matriz [[1,2], [3,4]] debe ser igual -3.");
+		        
+		        matriz = new vt.Matrix([[1,2], [3,4]]);
+		        nDeterminante = vt.Matrix.cofactor(2, 1, matriz);
+		        deepEqual(nDeterminante, -2, "El cofactor (2,1) de la matriz [[1,2], [3,4]] debe ser igual -2.");
+		        
+		        matriz = new vt.Matrix([[1,2], [3,4]]);
+		        nDeterminante = vt.Matrix.cofactor(2, 2, matriz);
+		        deepEqual(nDeterminante, 1, "El cofactor (2,2) de la matriz [[1,2], [3,4]] debe ser igual 1.");
+		        
+		        matriz = new vt.Matrix([[5,0,0], [0,1,2], [0,3,4]]);
+		        nDeterminante = vt.Matrix.cofactor(1, 1, matriz);
+		        deepEqual(nDeterminante, -2, "El cofactor (1,1) de la matriz [[1,0,0], [0,1,2], [0,3,4]] debe ser igual -2.");
+		        
+		        
 		      });
 		      
-		      test("Operaciones con Matrices", function() {
+		      test("Manipulación de Matrices: producto por escalar", function() {
 		        var matriz,
 		        	arreglo,
 		        	nDeterminante;

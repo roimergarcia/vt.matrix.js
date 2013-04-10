@@ -198,12 +198,14 @@
     return null;
   };
 
-  //Devuelve una nueva matriz que es el cofactor i j de la matriz indicada. 
+  //Devuelve un escalar que es el cofactor ij de la matriz indicada. 
   global.vt.Matrix.cofactor = function(i, j, matrix){
     var data,
         nRows,
         nCols,
-        newData = [];
+        newData = [],
+        minnor,
+        nDeterminant;
  
     if ( !(matrix instanceof vt.Matrix) ) {
       return null;
@@ -223,23 +225,29 @@
     nCols = matrix.getRows();
     
     //Verifica los límites
-    if ( i <= 0 || i> nRows || j <= 0 || j> nCols ) {
+    if ( nRows==0 || i <= 0 || i> nRows || j <= 0 || j> nCols ) {
       return null;
     };
     
-    //Empieza el cálculo
+    //Empieza el cálculo: elimina la fila i y columna j 
     for (var p=0; p<nRows; p++) {
-      if (p===i){
+      if (p===i-1){
         continue;
       };
       newData.push([]);
       for (var q=0; q<nCols;q++) {
-        if (q===j){
+        if (q===j-1){
           continue;
         };
-        newData[p].push(data[p][q]);
+        newData[newData.length-1].push(data[p][q]);
       };
     };
+    
+    minnor = new global.vt.Matrix(newData);
+    
+    nDeterminant = global.vt.Matrix.determinant(minnor);
+    
+    return Math.pow(-1,i+j)*nDeterminant;
     
   };
     
